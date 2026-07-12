@@ -37,32 +37,35 @@ def render():
         cols = st.columns(3) # Hiển thị 3 cột
         
        # Dùng container nhỏ gọn hơn thay vì chia cột cố định
-        for i, (index, row) in enumerate(df_menu.iterrows()):
+        f# --- GIAO DIỆN CHỌN MÓN GỌN NHƯ APP ---
+        st.header("🥢 Chọn món của bạn")
+        
+        for index, row in df_menu.iterrows():
             mon_id = row['id']
             ten_mon = str(row['ten_mon'])
             gia_tien = int(row['gia_tien'])
             qty = st.session_state.cart.get(mon_id, 0)
-            with st.container(border=True):
-                # Bố cục 2 phần: Tên món bên trái, Nút bấm bên phải
-                c_info, c_qty = st.columns([1.5, 1]) 
-                
-                with c_info:
-                    st.markdown(f"### {ten_mon}")
-                    st.write(f"💰 **Giá:** {gia_tien:,.0f} đ")
-                
-                with c_qty:
-                    # Tỷ lệ 1:2:1 giúp nút +/- nhỏ lại, số ở giữa nổi bật hơn
-                    c1, c2, c3 = st.columns([1, 2, 1]) 
-                    with c1:
-                        if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0), use_container_width=True):
-                            st.session_state.cart[mon_id] -= 1
-                            st.rerun()
-                    with c2:
-                        st.markdown(f"<h4 style='text-align: center; margin-top: 5px;'>{qty}</h4>", unsafe_allow_html=True)
-                    with c3:
-                        if st.button("➕", key=f"plus_{mon_id}", type="primary", use_container_width=True):
-                            st.session_state.cart[mon_id] += 1
-                            st.rerun()
+            
+            # Chia tỉ lệ: 7 phần cho tên/giá, 3 phần cho bộ nút +/-
+            c_info, c_btn = st.columns([7, 3])
+            
+            with c_info:
+                st.markdown(f"**{ten_mon}**")
+                st.write(f"💰 {gia_tien:,.0f} đ")
+            
+            with c_btn:
+                # Dùng layout ngang: [-] [số] [+]
+                cols_btn = st.columns([1, 1, 1])
+                with cols_btn[0]:
+                    if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0)):
+                        st.session_state.cart[mon_id] -= 1
+                        st.rerun()
+                with cols_btn[1]:
+                    st.markdown(f"<div style='text-align: center; padding-top: 5px;'>{qty}</div>", unsafe_allow_html=True)
+                with cols_btn[2]:
+                    if st.button("➕", key=f"plus_{mon_id}", type="primary"):
+                        st.session_state.cart[mon_id] += 1
+                        st.rerun()
         st.markdown("---")
         # ==========================================
 
