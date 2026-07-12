@@ -35,11 +35,6 @@ def render():
         # ==========================================
         st.header("🥢 Chọn món của bạn")
         cols = st.columns(3) # Hiển thị 3 cột
-        
-       # Dùng container nhỏ gọn hơn thay vì chia cột cố định
-        f# --- GIAO DIỆN CHỌN MÓN GỌN NHƯ APP ---
-        st.header("🥢 Chọn món của bạn")
-        
         for index, row in df_menu.iterrows():
             mon_id = row['id']
             ten_mon = str(row['ten_mon'])
