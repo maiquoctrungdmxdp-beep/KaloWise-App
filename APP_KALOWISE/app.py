@@ -26,7 +26,7 @@ if "logged_in" not in st.session_state:
 
 # MENU ĐIỀU HƯỚNG TỔNG (Sidebar)
 st.sidebar.title("🌿 KALOWISE")
-view_mode = st.sidebar.radio("CHUYỂN ĐỔI GIAO DIỆN", ["🛒 Đặt món (Khách hàng)", "🔐 Khu vực Quản trị"])
+view_mode = st.sidebar.radio("CHUYỂN ĐỔI GIAO DIỆN", ["🛒 Đặt món", "🔐 Khu vực Quản trị"])
 st.sidebar.markdown("---")
 
 # ==========================================
