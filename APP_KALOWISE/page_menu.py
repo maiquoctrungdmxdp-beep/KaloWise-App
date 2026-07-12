@@ -42,6 +42,8 @@ def render():
             gia_tien = int(row['gia_tien'])
             qty = st.session_state.cart.get(mon_id, 0)
             
+            # Chia tỉ lệ: 7 phần cho tên/giá, 3 phần cho bộ nút +/- 
+            # Trên mobile nó sẽ tự thu nhỏ tỉ lệ này lại rất gọn
             c_info, c_btn = st.columns([7, 3])
             
             with c_info:
@@ -49,19 +51,23 @@ def render():
                 st.write(f"💰 {gia_tien:,.0f} đ")
             
             with c_btn:
-                # Dùng layout ngang: [-] [số] [+]
+                # Dùng layout ngang cho bộ nút: [-] [số] [+]
                 cols_btn = st.columns([1, 1, 1])
+                
                 with cols_btn[0]:
-                    if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0)):
+                    if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0), use_container_width=True):
                         st.session_state.cart[mon_id] -= 1
                         st.rerun()
+                
                 with cols_btn[1]:
-                    # Sửa lại chỗ này, không dùng f-string bị lỗi nữa
-                    st.markdown(f"<div style='text-align: center; padding-top: 5px;'>{qty}</div>", unsafe_allow_html=True)
+                    # Hiển thị số lượng căn giữa
+                    st.markdown(f"<div style='text-align: center; padding-top: 5px; font-weight: bold;'>{qty}</div>", unsafe_allow_html=True)
+                
                 with cols_btn[2]:
-                    if st.button("➕", key=f"plus_{mon_id}", type="primary"):
+                    if st.button("➕", key=f"plus_{mon_id}", type="primary", use_container_width=True):
                         st.session_state.cart[mon_id] += 1
                         st.rerun()
+            
             st.markdown("---")
         st.markdown("---")
         # ==========================================
