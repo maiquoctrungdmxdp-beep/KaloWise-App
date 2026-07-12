@@ -32,7 +32,7 @@ st.sidebar.markdown("---")
 # ==========================================
 # 1. GIAO DIỆN KHÁCH HÀNG (PUBLIC)
 # ==========================================
-if view_mode == "🛒 Đặt món (Khách hàng)":
+if view_mode == "🛒 Đặt món":
     page_menu.render()
 
 # ==========================================
