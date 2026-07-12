@@ -34,33 +34,32 @@ def render():
         # GIAO DIỆN CHỌN MÓN (HIỂN THỊ DẠNG CỘT)
         # ==========================================
         st.header("🥢 Chọn món của bạn")
-        cols = st.columns(3) # Hiển thị 3 cột
-        for index, row in df_menu.iterrows():
-            mon_id = row['id']
-            ten_mon = str(row['ten_mon'])
-            gia_tien = int(row['gia_tien'])
-            qty = st.session_state.cart.get(mon_id, 0)
+        cols = st.columns(3)
+    
+    for i, (index, row) in enumerate(df_menu.iterrows()):
+        mon_id = row['id']
+        ten_mon = str(row['ten_mon'])
+        gia_tien = int(row['gia_tien'])
+        col = cols[i % 3]
+        qty = st.session_state.cart.get(mon_id, 0)
+        
+        with col.container(border=True):
+            st.markdown(f"**{ten_mon}**")
+            st.write(f"💰 {gia_tien:,.0f} đ")
             
-            # Chia tỉ lệ: 7 phần cho tên/giá, 3 phần cho bộ nút +/-
-            c_info, c_btn = st.columns([7, 3])
-            
-            with c_info:
-                st.markdown(f"**{ten_mon}**")
-                st.write(f"💰 {gia_tien:,.0f} đ")
-            
-            with c_btn:
-                # Dùng layout ngang: [-] [số] [+]
-                cols_btn = st.columns([1, 1, 1])
-                with cols_btn[0]:
-                    if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0)):
-                        st.session_state.cart[mon_id] -= 1
-                        st.rerun()
-                with cols_btn[1]:
-                    st.markdown(f"<div style='text-align: center; padding-top: 5px;'>{qty}</div>", unsafe_allow_html=True)
-                with cols_btn[2]:
-                    if st.button("➕", key=f"plus_{mon_id}", type="primary"):
-                        st.session_state.cart[mon_id] += 1
-                        st.rerun()
+            # Layout nút bấm siêu gọn: [-] [số] [+]
+            # Dùng size nhỏ nhất có thể
+            b1, b2, b3 = st.columns([1, 1, 1])
+            with b1:
+                if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0), use_container_width=True):
+                    st.session_state.cart[mon_id] -= 1
+                    st.rerun()
+            with b2:
+                st.markdown(f"<p style='text-align:center; padding-top: 5px;'>{qty}</p>", unsafe_allow_html=True)
+            with b3:
+                if st.button("➕", key=f"plus_{mon_id}", type="primary", use_container_width=True):
+                    st.session_state.cart[mon_id] += 1
+                    st.rerun()
         st.markdown("---")
         # ==========================================
 
