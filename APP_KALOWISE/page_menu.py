@@ -36,32 +36,33 @@ def render():
         st.header("🥢 Chọn món của bạn")
         cols = st.columns(3) # Hiển thị 3 cột
         
+       # Dùng container nhỏ gọn hơn thay vì chia cột cố định
         for i, (index, row) in enumerate(df_menu.iterrows()):
             mon_id = row['id']
             ten_mon = str(row['ten_mon'])
             gia_tien = int(row['gia_tien'])
-            col = cols[i % 3] # Phân chia cột
-            
-            # Số lượng món hiện tại trong giỏ
             qty = st.session_state.cart.get(mon_id, 0)
             
-            # Hiển thị thẻ món đồ uống
-            with col.container(border=True):
-                st.markdown(f"### {ten_mon}")
-                st.write(f"💰 **Giá:** {gia_tien:,.0f} đ")
+            # Chỉ cần 1 container thôi, nó tự tràn viền theo màn hình điện thoại
+            with st.container(border=True):
+                c_info, c_qty = st.columns([2, 1])
+                with c_info:
+                    st.markdown(f"### {ten_mon}")
+                    st.write(f"💰 **Giá:** {gia_tien:,.0f} đ")
                 
-                # Nút điều chỉnh số lượng giỏ hàng
-                c1, c2, c3 = st.columns([1, 2, 1])
-                with c1:
-                    if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0), use_container_width=True):
-                        st.session_state.cart[mon_id] -= 1
-                        st.rerun()
-                with c2:
-                    st.markdown(f"<h2 style='text-align: center; color: black;'> {qty} </h2>", unsafe_allow_html=True)
-                with c3:
-                    if st.button("➕", key=f"plus_{mon_id}", type="primary", use_container_width=True):
-                        st.session_state.cart[mon_id] += 1
-                        st.rerun()
+                with c_qty:
+                    # Nút cộng trừ đặt hàng ngang cho tiết kiệm diện tích
+                    c1, c2, c3 = st.columns([1, 1, 1])
+                    with c1:
+                        if st.button("➖", key=f"minus_{mon_id}", disabled=(qty == 0)):
+                            st.session_state.cart[mon_id] -= 1
+                            st.rerun()
+                    with c2:
+                        st.markdown(f"<h4 style='text-align: center;'>{qty}</h4>", unsafe_allow_html=True)
+                    with c3:
+                        if st.button("➕", key=f"plus_{mon_id}", type="primary"):
+                            st.session_state.cart[mon_id] += 1
+                            st.rerun()
 
         st.markdown("---")
         # ==========================================
