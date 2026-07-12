@@ -3,6 +3,7 @@ streamlit-autorefresh
 pandas
 supabase
 requests
+plotly
 certifi
 cffi
 charset-normalizer
